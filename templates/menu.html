@@ -1,0 +1,238 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="Description" content="Enter your description here" />
+  <title>Indo Bites | Menu </title>
+  <!-- bootstrap CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css">
+ 
+  <!-- OWN CSS -->
+  <link rel="stylesheet" href="{% static 'style.css' %}">
+  <!--jquery-->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+  <style>
+    
+
+.fa{
+   
+    color:#e7e6ef;
+    text-align: center;
+    font-size: 1.2em;
+    transition: transform .5s;
+}
+
+ .main-btn:hover .fa{
+    transform: scale(1.5);
+    color:#fff;
+}
+
+
+  </style>
+</head>
+<body>
+   <header>   
+      <nav class="navbar navbar-expand-lg navigation-wrap">
+        <div class="container">
+          <a class="navbar-brand" href="#"><img decoding="async" src="{% static 'logo.png' %}" height="100"></a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText"
+            aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="text-muted" style="font-family:'papyrus">Click me</span>
+            <i class=" fas fa-stream navbar-toggler-icon"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarText">
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="/">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#about">About Us</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/prof">Profile</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#testimonial">Reviews</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#faq">FAQ</a>
+              </li>
+              <li>
+                <strong> Welcome Dear {{value}}<strong>
+                {% if sign %}
+                <button class="main-btn"><a href="/logout">logout</a></button>
+                </li>
+                {% else %}
+                <button class="main-btn"><a href="/login">login</a></button>
+                </li>
+                {% endif %}
+                
+  
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+<br>
+<br>
+    <!-- SLIDE !! -->
+    <br>
+    <br>
+    <hr>
+<form method="post"  action="/menu" class="story-section">
+  {% csrf_token %}
+  <div class="form-group">
+    <label> MENU </label>
+    <div class="d-flex justify-content-center">
+      <div class="mx-2 pe-4">
+        <select class="form-control-lg" id="exampleFormControlSelect1" name="select">
+      <option>Biriyani</option>
+      <option>Tandoori & Kebab</option>
+      <option>Chicken in Gravy</option>
+      <option>Mutton in Gravy</option>
+      <option>Vegetable</option>
+      <option>Snacks</option>
+      <option>Rice </option>
+      <option>Roti & Naan</option>
+      <option>Desserts</option>  
+      <option>Beverages</option>
+      <option>Icecream</option>
+       </select>
+      </div>
+     
+    <div class="d-flex">
+      <input class="form-control-lg me-4 pe-4" type="search" name="searchMenu" id="searchMenu" placeholder="Search" aria-label="Search">
+       <button type="submit" class="main-btn"><i class="fa fa-search me-2"></i>Show </button>
+    </div>
+   </div>
+ </div>
+  </form>
+  <hr>
+    
+ <!--<section id="explore-food">
+     <div class="explore-food wrapper">
+       <div class="container">
+       <div class="row pt-5">
+  {% for objec in objects %}
+           <div class="col-lg-4 col-md-6 mb-lg-0 mb-5">
+             <div class="card">
+               <img decoding="async" src="/media/{{objec.image}}"  height="250" width="355" >
+               <div class="pt-3">
+                <h4>{{objec.product_name}}</h4>
+                <p>{{objec.description}}</p>
+                <span>₹{{objec.price}} <del>₹330</del></span>
+                <button class="mt-4 main-btn">Order Now</button>
+              </div>
+             </div>
+           </div>
+    {% endfor %}
+  </div>
+  </div>
+  </div>
+  </section>-->
+  <h1>Showing searched items</h1>
+   <section id="explore-food">
+     <div class="explore-food wrapper">
+       <div class="container">
+       <div class="row ">
+        {% if cat2 %}
+    {% for objec in cat2 %}
+           <div class="col-lg-4 col-md-6 mb-lg-0 mb-5">
+             <div class="card mb-2">
+               <img decoding="async" src="/media/{{objec.image}}"  height="250" width="355" >
+               <div class="pt-3">
+                <h4>{{objec.product_name}}</h4>
+                <p>{{objec.description}}</p>
+                <span>₹{{objec.price}} <del>₹{{objec.oldprice}}</del></span>
+                {% load mathfilters %}
+                {% widthratio objec.price  objec.oldprice 100 as width %}
+                 
+                <span class="text-capitalize text-center">offer: {{ 100|sub:width }}%</span>
+                
+                <button class="mt-4 main-btn">Order Now</button>
+              </div>
+             </div>
+           </div>
+    {% endfor %}
+    {% else %}
+    <h3> no product can be dislayed</h3>
+    {% endif %}
+  </div>
+  </div>
+  </div>
+  </section>
+<br>
+<hr>
+<h1>Enjoy Our {{deli}}</h1>
+   <section id="explore-food">
+     <div class="explore-food wrapper">
+       <div class="container">
+       <div class="row ">
+    {% for obj in cat1 %}
+           <div class="col-lg-4 col-md-6 mb-lg-0 mb-5">
+             <div class="card mb-2">
+               <img decoding="async" src="/media/{{obj.image}}"  height="250" width="355" >
+               <div class="pt-3">
+                <h4>{{obj.product_name}}</h4>
+                <p>{{obj.description}}</p>
+                <span>₹{{obj.price}} <del>₹{{obj.oldprice}}</del></span>
+                {% load mathfilters %}
+                {% widthratio obj.price  obj.oldprice 100 as width %}
+                 
+                <span>The offer is: {{ 100|sub:width }}%</span>
+                
+                <button class="mt-4 main-btn">Order Now</button>
+              </div>
+             </div>
+           </div>
+    {% endfor %}
+  </div>
+  </div>
+  </div>
+  </section>
+
+
+
+  <!-- section-9 footer-->
+  <footer id="footer">
+   <div class="footer py-5">
+     <div class="container">
+       <div class="row">
+         <div class="col-md-12 text-center">
+           <a class="footer-link" href="/signin">Register</a>
+           <a class="footer-link" href="#">Forum</a>
+           <a class="footer-link" href="#">Affiliate</a>
+           <a class="footer-link" href="#">FAQ</a>
+           <div class="footer-social pt-4 text-center">
+             <a href="#"><i class="fab fa-facebook-f"></i></a>
+             <a href="#"><i class="fab fa-twitter"></i></a>
+             <a href="#"><i class="fab fa-youtube"></i></a>
+             <a href="#"><i class="fab fa-dribbble"></i></a>
+             <a href="#"><i class="fab fa-linkedin"></i></a>
+             <a href="#"><i class="fab fa-instagram"></i></a>
+           </div>
+         </div>
+         <div class="col-sm-12">
+           <div class="footer-copy">
+             <div class="copy-right text-center pt-5">
+               <p class="text-light">© 2023.Indo Bites. All rights reserved.</p>
+             </div>
+           </div>
+         </div>
+       </div>
+     </div>
+   </div>
+ </footer>
+  
+
+ <!-- JS Libraries -->
+ <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+ <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.min.js"></script>
+ <!-- own js -->
+ <script src="{%static 'js/main.js'%}"></script>
+</body>
+</html>
