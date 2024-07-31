@@ -5,33 +5,46 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from django.contrib.auth import logout,login
 from .forms import Profileform,Userupdate,Bookform
-from .models import Profile,product,Booking
+from .models import Profile,Product,Booking
 from django.core.mail import EmailMessage,send_mail
 from django.contrib.auth import get_user_model
 from math import ceil
 import json
 from django.db.models import Count
-
+from django.contrib import messages
+from django.http import JsonResponse
 # Create your views here.
 def logoutuser(request):
     logout(request)
     # Redirect to a success page.
     return redirect('/')
 
+
+
 def loginuser(request):
-   if request.method == "POST":
-     username=request.POST.get('username')
-     password=request.POST.get('password')
-     user = authenticate(username=username, password=password)
-     if user is not None:
-    # A backend authenticated the credentials
-        login(request,user)
-        return redirect("/")
-     else:
-    # No backend authenticated the credentials
-        return render(request,'login.html')
-   return render(request,'login.html')
-  
+    if request.method == "POST":
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(username=username, password=password)
+        
+        is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
+        
+        if user is not None:
+            # A backend authenticated the credentials
+            login(request, user)
+            if is_ajax:
+                return JsonResponse({"success": True}, status=200)
+            else:
+                return redirect("/")
+        else:
+            error_message = "Invalid username or password."
+            if is_ajax:
+                return JsonResponse({"error": error_message}, status=400)
+            else:
+                messages.error(request, error_message)
+                return render(request, 'login.html')
+    return render(request, 'login.html')
+
 
   
 def index(request):
@@ -48,31 +61,41 @@ def index(request):
     return render(request,'index.html',context)
 
 
-
 def handlesignin(request):
-   if request.method == "POST":# 2 types of form  request get post
-      email=request.POST.get('email')
-      name=request.POST.get('name')
-      title=request.POST.get('title')
-      phone=request.POST.get('phone')
-      password=request.POST.get('password')
-      #check error
-      
-      #create the user
-      myuser=User.objects.create_user(name,email,password)
- #     user.first_name = request.POST.get('first_name')
-  #    user.last_name = request.POST.get('last_name')
-      myuser.first_name=name
-      myuser.last_name=title
-      myuser.save()
-      user = authenticate(username=name, password=password)
-      if user is not None:
-    # A backend authenticated the credentials
-        login(request,user)
-        return redirect("/")
-      messages.success(request,'Profile made')
-      return redirect("/")
-   return render(request,'CreateAccount.html')
+    if request.method == "POST":
+        email = request.POST.get('email')
+        name = request.POST.get('name')
+        title = request.POST.get('title')  # Assuming 'title' is meant to be last name or similar
+        phone = request.POST.get('phone')
+        password = request.POST.get('password')
+
+        # Check if all required fields are provided
+        if not name or not email or not password or not title:
+            messages.error(request, "All fields are required.")
+            return redirect("/signin")
+
+        # Create the user
+        try:
+            myuser = User.objects.create_user(username=name, email=email, password=password)
+            myuser.first_name = name
+            myuser.last_name = title  # Assign the title or last name
+            myuser.save()
+
+            # Authenticate and log the user in
+            user = authenticate(username=name, password=password)
+            if user is not None:
+                login(request, user)
+                messages.success(request, 'Profile created successfully.')
+                return redirect("/")
+            else:
+                messages.error(request, "Authentication failed. Please try logging in.")
+                return redirect("/login")
+
+        except Exception as e:
+            messages.error(request, f"An error occurred: {e}")
+            return redirect("/signin")
+
+    return render(request, 'CreateAccount.html')
 
 def prof(request):
     if request.user.is_anonymous:

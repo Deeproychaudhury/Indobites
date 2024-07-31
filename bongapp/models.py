@@ -20,14 +20,14 @@ SEAT_CHOICES = (
 # Create your models here. DJANGO already comes with a built in user model 
 class Profile(models.Model):
     user = models.OneToOneField(User,on_delete=models.CASCADE)
-    image= models.ImageField(default='default.jpg',upload_to='profile_pics') 
+    image= models.ImageField(default='default1.jpg',upload_to='profile_pics') 
     phone=models.BigIntegerField(default=0000)
     review=models.TextField(default='No review',max_length=525)
     def __str__(self):
         return f'{self.user.username}Profile'
     
-    def save(self):
-        super().save()
+    def save(self,*args, **kwargs):
+        super(Profile,self).save(*args,**kwargs)
     
         img=Image.open(self.image.path)
 
@@ -50,7 +50,7 @@ class Booking(models.Model):
       def __str__(self) :
           return self.name
 
-class product(models.Model):
+class Product(models.Model):
     product_id=models.AutoField
     product_name=models.CharField(max_length=100)
     category=models.CharField(max_length=50,default="")
@@ -64,5 +64,12 @@ class product(models.Model):
     def __str__(self):
        return self.product_name
 
+class OrderModel(models.Model):
+    created_on=models.DateTimeField(auto_now_add=True)
+    price=models.IntegerField(default=0)
+    items=models.ManyToManyField('Product',related_name='order', blank=True)
+
+    def __str__(self):
+        return f'Order: {self.created_on.strftime("%b %d %I: %M %p")}'
 
 
