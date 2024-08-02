@@ -1,15 +1,18 @@
-from django.shortcuts import render,redirect,HttpResponse
+from django.shortcuts import render,redirect,get_object_or_404
+from django.http import HttpResponseBadRequest
 from datetime import datetime,timedelta
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from django.contrib.auth import logout,login
 from .forms import Profileform,Userupdate,Bookform
-from .models import Profile,Product,Booking
+from .models import Profile,Product,Booking,OrderModel
 from django.core.mail import EmailMessage,send_mail
 from django.contrib.auth import get_user_model
 from math import ceil
+from django.views import View
 import json
+from django.contrib.auth.decorators import login_required
 from django.db.models import Count
 from django.contrib import messages
 from django.http import JsonResponse
@@ -26,9 +29,7 @@ def loginuser(request):
         username = request.POST.get('username')
         password = request.POST.get('password')
         user = authenticate(username=username, password=password)
-        
         is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
-        
         if user is not None:
             # A backend authenticated the credentials
             login(request, user)
@@ -133,8 +134,8 @@ def menu(request):
       search_query='###'
    if search_query=="":
       search_query="###"
-   prodobject=product.objects.all()
-   cat1= product.objects.filter(category=filter_query)
+   prodobject=Product.objects.all()
+   cat1= Product.objects.filter(category=filter_query)
    cati2=prodobject.filter( product_name__icontains=search_query)|prodobject.filter(category__icontains=search_query)|prodobject.filter(price__startswith=search_query)
    cat2=cati2.values()
    if request.user.is_anonymous:
@@ -155,8 +156,66 @@ def menu(request):
     }
    return render(request,'menu.html',context)
 
+#class Cart(View):
+@login_required
+def add_to_cart(request):
+    if request.method=='POST':
+     product=request.POST.get('obj_id')
+     quantity=request.POST.get('quantity')
+     if not product or not quantity:
+         messages.error(request,"Invalid input in add to cart")
+    phone= request.user.profile.phone 
+    try:
+            product = Product.objects.get(id=product)
+    except Product.DoesNotExist:
+            return HttpResponseBadRequest("Product not found")
+    
+    order=OrderModel(
+        product=product,
+        phone=phone,
+        customer=request.user,
+        quantity=quantity,
+        price=product.price * int(quantity)
+        
+     )
+    order.save()
+    messages.success(request,"Item added. Proceed to checkout or add browse other items")
+    return redirect('menu')
+
+@login_required
 def cart(request):
-   return render(request,'Cart.html')
+      orders=OrderModel.objects.filter(customer=request.user)
+      count=orders.count() #count number of orders
+      sum=0
+      for ord in orders:
+          sum+=ord.price
+      if request.method == 'POST':
+        order_id = request.POST.get('order_id')
+        action = request.POST.get('action')
+
+        order = get_object_or_404(OrderModel, id=order_id, customer=request.user)
+
+        if action == 'update':
+            quantity = request.POST.get('quantity')
+            if quantity is not None:
+                try:
+                    new_quantity = int(quantity)
+                    if new_quantity > 0:
+                        order.quantity = new_quantity
+                        order.price = order.product.price * new_quantity
+                        order.save()
+                    else:
+                        order.delete()
+                        messages.success(request, "Item removed from cart")
+                except ValueError:
+                    messages.error(request, "Invalid quantity")
+        elif action == 'delete':
+            order.delete()
+            messages.success(request, "Item removed from cart")
+
+        return redirect('cart')
+
+      return render(request, 'cart.html', {'orders': orders, 'count': count, 'value': request.user.username, 'sum': sum})
 
 def booking(request):
      if request.user.is_anonymous:

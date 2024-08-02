@@ -33,10 +33,18 @@ class Userupdate(forms.ModelForm):
 class Profileform(forms.ModelForm):
    phone=forms.IntegerField()
    review=forms.CharField()
+   address = forms.CharField(widget=forms.TextInput(attrs={
+        'class': "form-control",
+        'placeholder': 'Address'
+    }))    
+   state = forms.CharField(widget=forms.TextInput(attrs={
+        'class': "form-control",
+        'placeholder': 'State'
+    }))
 
    class Meta:
       model=Profile
-      fields= ['image','phone','review']
+      fields= ['image','phone','review','address','state']
       widgets = {
             'review': TextInput(attrs={
                 'class': "form-control",

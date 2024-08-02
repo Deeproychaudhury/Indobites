@@ -23,6 +23,8 @@ class Profile(models.Model):
     image= models.ImageField(default='default1.jpg',upload_to='profile_pics') 
     phone=models.BigIntegerField(default=0000)
     review=models.TextField(default='No review',max_length=525)
+    address = models.CharField(max_length=300,default='No address')
+    state=models.CharField(max_length=111,default='No state')
     def __str__(self):
         return f'{self.user.username}Profile'
     
@@ -35,20 +37,6 @@ class Profile(models.Model):
             output_size=(300,300)
             img.thumbnail(output_size)
             img.save(self.image.path)
-
-    
-class Booking(models.Model):
-      name=models.TextField(default="no name")
-      day = models.DateField(default=datetime.today())
-      email=models.EmailField(default='ridhimansin@gmail.com')
-      description=models.CharField(max_length=250,default='no special request')
-      seats= models.CharField(max_length=100, choices=SEAT_CHOICES, default="2")
-      phone=models.IntegerField(default=0)
-     
-
-
-      def __str__(self) :
-          return self.name
 
 class Product(models.Model):
     product_id=models.AutoField
@@ -67,9 +55,26 @@ class Product(models.Model):
 class OrderModel(models.Model):
     created_on=models.DateTimeField(auto_now_add=True)
     price=models.IntegerField(default=0)
-    items=models.ManyToManyField('Product',related_name='order', blank=True)
+    product = models.ForeignKey(Product,
+                                on_delete=models.CASCADE,default=1)
+    customer = models.ForeignKey(User,
+                                 on_delete=models.CASCADE,default=1)
+    quantity = models.IntegerField(default=1)
+    phone = models.CharField(max_length=50, default='', blank=True)
 
     def __str__(self):
         return f'Order: {self.created_on.strftime("%b %d %I: %M %p")}'
 
 
+class Booking(models.Model):
+      name=models.TextField(default="no name")
+      day = models.DateField(default=datetime.today())
+      email=models.EmailField(default='ridhimansin@gmail.com')
+      description=models.CharField(max_length=250,default='no special request')
+      seats= models.CharField(max_length=100, choices=SEAT_CHOICES, default="2")
+      phone=models.IntegerField(default=0)
+     
+
+
+      def __str__(self) :
+          return self.name

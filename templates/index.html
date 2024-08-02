@@ -28,7 +28,7 @@
 
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText"
           aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="text-muted" style="font-family:'papyrus">Click me</span>
+          <span class="text-muted" style="font-family:'papyrus'">Click me</span>
           <i class=" fas fa-stream navbar-toggler-icon"></i>
         </button>
         <div class="collapse navbar-collapse" id="navbarText">
@@ -49,9 +49,9 @@
               <a class="nav-link" href="#faq">FAQ</a>
             </li>
             <li>
-              <strong> Welcome Dear {{value}}<strong>
-                  {% if sign %}
-                  <button class="main-btn"><a href="/logout">logout</a></button>
+              <strong> Welcome Dear {{value}}</strong>
+              {% if sign %}
+              <button class="main-btn"><a href="/logout">logout</a></button>
             </li>
             {% else %}
             <button class="main-btn"><a href="/login">login</a></button>
@@ -75,7 +75,7 @@
             <p>Taste the goodness, reap the rewards. Make good food choices and enjoy the dividends at our restaurant.
             </p>
             <div class="mt-4">
-              <button class="main-btn"><a href="/order">Order now <i
+              <button class="main-btn"><a href="/cart">Order now <i
                     class="fas fa-shopping-basket ps-3"></i></a></button>
               <button class="white-btn ms-lg-4 mt-lg-0 mt-4"><a href="/menu">Menu <i
                     class="fas fa-angle-right ps-3"></i></a></button>
@@ -138,7 +138,7 @@
               experimenting to bring you unique and memorable dining experiences.
               Our attention to detail extends to the presentation of our dishes, with each plate being a visual work of
               art that is as beautiful as it is delicious.</p>
-            <button class="main-btn mt-4">Learn More</button>
+            <button class="main-btn mt-4"><a href="menu">Learn More</a> </button>
           </div>
         </div>
       </div>
@@ -154,7 +154,7 @@
               <li>Unique dining adventure: India's rich culinary heritage.</li>
               <li>Authentic Indian fusion: Classic favorites, modern twist.</li>
             </ul>
-            <button class="main-btn mt-4">Learn More</button>
+            <button class="main-btn mt-4"><a href="menu">Learn More</a> </button>
           </div>
           <div class="col-lg-7 col-md-12">
             <div class="card border-0">
@@ -247,7 +247,7 @@
                 <h4>Handi Biriyani</h4>
                 <p>Time: 30 - 45 Minutes | Serves: 1</p>
                 <span>₹310 <del>₹330</del></span>
-                <button class="mt-4 main-btn">Order Now</button>
+                <button class="mt-4 main-btn"><a href="menu">Order Now</a></button>
               </div>
             </div>
           </div>
@@ -258,7 +258,7 @@
                 <h4>Panner Tikka</h4>
                 <p>Time: 20 - 25 Minutes | Serves: 1</p>
                 <span>₹185<del>₹200</del></span>
-                <button class="mt-4 main-btn">Order Now</button>
+                <button class="mt-4 main-btn"><a href="menu">Order Now</a></button>
               </div>
             </div>
           </div>
@@ -269,7 +269,7 @@
                 <h4>Tandoori Chicken</h4>
                 <p>Time: 25 - 35 Minutes | Serves: 1</p>
                 <span>₹320<del>₹350</del></span>
-                <button class="mt-4 main-btn">Order Now</button>
+                <button class="mt-4 main-btn"><a href="menu">Order Now</a></button>
               </div>
             </div>
           </div>

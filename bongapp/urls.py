@@ -11,6 +11,7 @@ urlpatterns = [
     path("prof",views.prof,name='prof'),
     path("booking",views.booking,name='booking'),
     path("menu",views.menu,name='menu'),
+    path('add_to_cart', views.add_to_cart, name='add_to_cart'),
     path("cart",views.cart,name='cart'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 # store image url

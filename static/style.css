@@ -19,7 +19,7 @@
 a,
 a:hover {
   text-decoration: none;
-  color:#eee;
+  color: #eee;
 }
 
 a:hover {
@@ -28,15 +28,16 @@ a:hover {
 
 strong {
   font-size: 1rem;
-  font-family:papyrus;
+  font-family: papyrus;
   font-weight: bold;
   line-height: 1.75rem;
   letter-spacing: 1px;
 }
+
 label {
   font-size: 1rem;
-  color:white;
-  font-family:papyrus;
+  color: white;
+  font-family: papyrus;
   font-weight: bold;
   line-height: 1.75rem;
   letter-spacing: 1px;
@@ -76,17 +77,19 @@ body {
 =========================================
     Custom Scrollbar
 =========================================
-*/ 
+*/
 
 ::-webkit-scrollbar {
   width: 0.625rem;
-} 
+}
+
 ::-webkit-scrollbar-track {
-  background: var(--white-color); 
-} 
+  background: var(--white-color);
+}
+
 ::-webkit-scrollbar-thumb {
-  background:var(--primary-color); 
-} 
+  background: var(--primary-color);
+}
 
 /*
 ==========================================
@@ -131,7 +134,7 @@ h5 {
 
 p {
   font-size: 1rem;
-  font-family:papyrus;
+  font-family: papyrus;
   font-weight: 400;
   line-height: 1.75rem;
   letter-spacing: 1px;
@@ -174,9 +177,11 @@ p {
   background-color: rgba(204, 161, 161, 0.488);
   color: var(--primary-color);
 }
-.white-btn a{
+
+.white-btn a {
   color: black;
 }
+
 .white-btn:hover {
   background-color: transparent;
   color: var(--primary-color);
@@ -205,48 +210,52 @@ p {
    Header Design
 ==========================================
 */
-.navigation-wrap{
-  position:fixed;
-  width:100%;
-  left:0;
-  z-index:1000;
-  -webkit-transition:all 0.3s ease-out;
-  transition:all 0.3s ease-out;
-} 
-.navigation-wrap .nav-item{
-  padding:0 0.625rem;
-  transition:all 200ms linear;
+.navigation-wrap {
+  position: fixed;
+  width: 100%;
+  left: 0;
+  z-index: 1000;
+  -webkit-transition: all 0.3s ease-out;
+  transition: all 0.3s ease-out;
 }
-.navbar-toggler:focus{
-  outline:unset;
-  border:unset;
+
+.navigation-wrap .nav-item {
+  padding: 0 0.625rem;
+  transition: all 200ms linear;
+}
+
+.navbar-toggler:focus {
+  outline: unset;
+  border: unset;
   box-shadow: none;
 }
-.nav-link{
-  font-size:0.9375rem;
+
+.nav-link {
+  font-size: 0.9375rem;
   font-weight: 600;
   text-transform: capitalize;
-  color:var(--primary-color);
+  color: var(--primary-color);
   letter-spacing: 1px;
 }
-.navigation-wrap .main-btn{
-  padding:0.3125rem 1.4375rem;
+
+.navigation-wrap .main-btn {
+  padding: 0.3125rem 1.4375rem;
   box-shadow: none;
-  margin-left:0.625rem;
-} 
+  margin-left: 0.625rem;
+}
 
 /* Change navbar styling on scroll */
 
-.navigation-wrap.scroll-on{
-  position:fixed;
-  top:0;
-  left:0;
-  width:100%;
-  background:var(--white-color);
-  box-shadow: 0 0.125rem 1.75rem 0 rgb(0,0,0,0.09);
-  transition:all .15s ease-in-out 0s;
+.navigation-wrap.scroll-on {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: var(--white-color);
+  box-shadow: 0 0.125rem 1.75rem 0 rgb(0, 0, 0, 0.09);
+  transition: all .15s ease-in-out 0s;
 }
- 
+
 
 
 /*
@@ -254,92 +263,100 @@ p {
    top-banner Design
 ==========================================
 */
-.top-banner{
-  width:100%;
-  background: url('bg/bg-1.jpg') no-repeat ;
-  background-size:cover;
+.top-banner {
+  width: 100%;
+  background: url('bg/bg-1.jpg') no-repeat;
+  background-size: cover;
   background-position: center center;
   background-attachment: fixed;
- 
-  padding:16.875rem 0 9.375rem;
+
+  padding: 16.875rem 0 9.375rem;
 }
-.top-banner p{
+
+.top-banner p {
   color: #fff2f2;
   font-weight: bold;
 }
 
- 
+
 
 /*
 ==========================================
   counter Design
 ==========================================
 */
-.counter-section{
+.counter-section {
   background-color: var(--primary-color);
-  padding:2.5rem 0;
+  padding: 2.5rem 0;
 }
-.counter-section p{
-  color:var(--white-color);
+
+.counter-section p {
+  color: var(--white-color);
   text-transform: uppercase;
 }
- 
+
 
 /*
 ==========================================
  about section Design
 ==========================================
 */
-.about-section{
+.about-section {
   background: var(--white-color);
 }
+
 .about-section .card,
-.about-section .card img{
+.about-section .card img {
   border-radius: 0.625rem;
 }
-.about-section .text-sec{
-  padding-left:2rem;
+
+.about-section .text-sec {
+  padding-left: 2rem;
 }
- 
+
 /*
 ==========================================
  food type section Design
 ==========================================
 */
 
- .food-type{
-   padding-top:3.25rem;
- }
-.food-type ul li{
-  font-size:1rem;
-  color:var(--text-color);
+.food-type {
+  padding-top: 3.25rem;
+}
+
+.food-type ul li {
+  font-size: 1rem;
+  color: var(--text-color);
   line-height: 32px;
-  position:relative;
+  position: relative;
   margin-left: 30px;
 }
-.food-type ul li::before{
-  position:absolute;
-  left:-2.1875rem;
-  color:var(--primary-color);
+
+.food-type ul li::before {
+  position: absolute;
+  left: -2.1875rem;
+  color: var(--primary-color);
   font-size: 1.25rem;
   font-family: "Font Awesome 5 Free";
-  content:'\f00c';
-  display:inline-block;
-  padding-right:3px;
-  vertical-align:middle;
+  content: '\f00c';
+  display: inline-block;
+  padding-right: 3px;
+  vertical-align: middle;
   font-weight: 900;
 }
-.story-section{
-  width:100%;/*/images/bg/bg-5.jpg*/
-  background: linear-gradient(rgba(0,0,0,0.290),rgba(0,0,0,0.192)),url('bg/bg-3.jpg') no-repeat ;
-  background-size:cover;
+
+.story-section {
+  max-width: 100%;
+  background: linear-gradient(rgba(0, 0, 0, 0.290), rgba(0, 0, 0, 0.192)), url('bg/bg-3.jpg') no-repeat;
+  background-size: cover;
   background-position: center center;
   background-attachment: fixed;
-   padding:50px;
+  padding: 50px;
   text-align: center;
-} 
-.story-section h2{
-  color:antiquewhite;
+}
+
+.story-section h2 {
+  color: antiquewhite;
 }
 
 /*
@@ -347,26 +364,29 @@ p {
  explore food section Design
 ==========================================
 */
-.explore-food .card{
-  border:none;
+.explore-food .card {
+  border: none;
   background-color: transparent;
   border-radius: 0.9375rem;
 }
-.explore-food .card img{
+
+.explore-food .card img {
   border-radius: 0.9375rem;
   object-fit: cover;
 }
-.explore-food .card span{
-  display:block;
+
+.explore-food .card span {
+  display: block;
   font-size: 1.5rem;
   font-weight: 700;
-  color:var(--primary-color);
-  padding-bottom:1rem;
-  border-bottom:0.0625rem solid #eee;
+  color: var(--primary-color);
+  padding-bottom: 1rem;
+  border-bottom: 0.0625rem solid #eee;
 }
-.explore-food .card span del{
-  color:var(--text-gray);
-  margin-left:0.5rem;
+
+.explore-food .card span del {
+  color: var(--text-gray);
+  margin-left: 0.5rem;
 }
 
 /*
@@ -374,44 +394,49 @@ p {
  testimonial section Design
 ==========================================
 */
-.testimonial-section{
-  background: url('bg/bg-4.jpg') no-repeat ;
-  background-size:cover;
+.testimonial-section {
+  background: url('bg/bg-4.jpg') no-repeat;
+  background-size: cover;
   background-position: center center;
   background-attachment: fixed;
 }
-.testimonial-section .carousel-item{
-  margin-top:3rem;
-  padding:10rem 3.125rem;
-  background-color:rgba(67, 67, 67, 0.418);
+
+.testimonial-section .carousel-item {
+  margin-top: 3rem;
+  padding: 10rem 3.125rem;
+  background-color: rgba(67, 67, 67, 0.418);
   border-radius: 0.9375rem;
   text-align: center;
-} 
-.testimonial-section .carousel-caption img{
-  max-width:5rem;
-  border-radius: 50%;
-  padding:0.3125rem;
 }
 
-.testimonial-section .carousel-item .carousel-caption p{
+.testimonial-section .carousel-caption img {
+  max-width: 5rem;
+  border-radius: 50%;
+  padding: 0.3125rem;
+}
+
+.testimonial-section .carousel-item .carousel-caption p {
   font-size: 1.3125rem;
   line-height: 2.0625rem;
-  padding:0 11% 0.625rem;
+  padding: 0 11% 0.625rem;
 }
-.testimonial-section .carousel-indicators{
-  bottom:-2.8125rem;
+
+.testimonial-section .carousel-indicators {
+  bottom: -2.8125rem;
 }
-.testimonial-section .carousel-indicators button{
-  width:15px;
-  height:15px;
-  outline:none;
+
+.testimonial-section .carousel-indicators button {
+  width: 15px;
+  height: 15px;
+  outline: none;
   border-radius: 50%;
-  border:none;
-  margin-right:1rem;
-  opacity:0.2;
+  border: none;
+  margin-right: 1rem;
+  opacity: 0.2;
 }
-.testimonial-section .carousel-indicators button.active{
-  opacity:1;
+
+.testimonial-section .carousel-indicators button.active {
+  opacity: 1;
 }
 
 
@@ -420,51 +445,54 @@ p {
 FAQ section Design
 ==========================================
 */
-.faq h4 span{
-  color:var(--primary-color);
+.faq h4 span {
+  color: var(--primary-color);
   font-size: 1.875rem;
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-  margin-right:0.3125rem;
-} 
-.book-food{
-  width:100%;
-  background:url('bg/bg-2.png') no-repeat center;
+  margin-right: 0.3125rem;
+}
+
+.book-food {
+  width: 100%;
+  background: url('bg/bg-2.png') no-repeat center;
   background-size: cover;
   background-attachment: fixed;
-  background-position:0 71.9125px;
-  padding:4.375rem 0;
-  filter:brightness(70%);
+  background-position: 0 71.9125px;
+  padding: 4.375rem 0;
+  filter: brightness(70%);
 }
 
 /* Form Control */
-.newsletter{
-  width:55%;
-  margin:0 auto;
+.newsletter {
+  width: 55%;
+  margin: 0 auto;
 }
-.newsletter input::placeholder{
+
+.newsletter input::placeholder {
   color: #eee;
 }
-.newsletter .form-control{
-  height:3.225rem;
-  padding:0 1.25rem;
-  font-size: 0.875rem; 
-  width:100%;
-  border:none;
+
+.newsletter .form-control {
+  height: 3.225rem;
+  padding: 0 1.25rem;
+  font-size: 0.875rem;
+  width: 100%;
+  border: none;
   border-radius: 100;
-  width:100%;
-  background: url('bg/bg-4.jpg') no-repeat ;
-  background-size:cover;
+  width: 100%;
+  background: url('bg/bg-4.jpg') no-repeat;
+  background-size: cover;
   background-position: center center;
-  border:0.1875rem solid var(--text-gray);
-  color:rgb(229, 221, 221);
+  border: 0.1875rem solid var(--text-gray);
+  color: rgb(229, 221, 221);
   font-weight: 700;
 }
 
 .newsletter .form-control:hover,
-.newsletter .form-control:focus{
-  outline:none;
+.newsletter .form-control:focus {
+  outline: none;
   box-shadow: none;
-  border-color:var(--primary-color);
+  border-color: var(--primary-color);
 }
 
 /*
@@ -472,115 +500,121 @@ FAQ section Design
 footer section Design
 ==========================================
 */
-.footer{
+.footer {
   background: var(--primary-color);
 }
-.footer .footer-link{
-  font-size:1rem;
-  color:var(--white-color);
-  padding:0 1.875rem;
+
+.footer .footer-link {
+  font-size: 1rem;
+  color: var(--white-color);
+  padding: 0 1.875rem;
 }
-.footer .footer-link:hover{
-  color:var(--white-color) !important;
+
+.footer .footer-link:hover {
+  color: var(--white-color) !important;
 }
-.footer a i{
+
+.footer a i {
   font-size: 1.5rem;
-  color:var(--white-color);
-  padding:0 1rem;
+  color: var(--white-color);
+  padding: 0 1rem;
 }
 
 
 @media (max-width:1024px) {
 
-    /* about section */
-    
+  /* about section */
+
 }
 
 @media (max-width: 991px) {
 
-    /*custom classes  */
-    .text-content{
-        width:100%;
-    }
-     
+  /*custom classes  */
+  .text-content {
+    width: 100%;
+  }
 
-    /* navbar brand */
-    .navigation-wrap .navbar-brand img{
-        height:3.8125rem;
-    }
-    .navigation-wrap{
-        text-align: center;
-        background-color: var(--white-color);
-    }
-    .navigation-wrap .nav-link{
-        line-height: 1.875rem;
-    }
-    /* Banner Design */
-    .top-banner{
-        padding:9.375rem 0 9.375rem;
-    }
 
-    /* carousel design */
-    .testimonial-section .carousel-item .carousel-caption p{
-        padding:0;
-    }
-     
+  /* navbar brand */
+  .navigation-wrap .navbar-brand img {
+    height: 3.8125rem;
+  }
+
+  .navigation-wrap {
+    text-align: center;
+    background-color: var(--white-color);
+  }
+
+  .navigation-wrap .nav-link {
+    line-height: 1.875rem;
+  }
+
+  /* Banner Design */
+  .top-banner {
+    padding: 9.375rem 0 9.375rem;
+  }
+
+  /* carousel design */
+  .testimonial-section .carousel-item .carousel-caption p {
+    padding: 0;
+  }
+
 }
 
 @media (max-width: 767px) {
 
-    /* custom css */
-    h1{
-        font-size:2.8rem;
-    }
-    h2{
-        font-size:2rem;
-        line-height: 2.0625rem;
-    }
-     
+  /* custom css */
+  h1 {
+    font-size: 2.8rem;
+  }
 
-    /* top banner */
-    .top-banner{
-        padding:10.875rem 0 9.375rem;
-    }
-    
+  h2 {
+    font-size: 2rem;
+    line-height: 2.0625rem;
+  }
 
-    /* story section */
-    .story-section{
-        height:auto;
-        padding:3rem 0;
-    }
-    
 
-    /* carousel design */
-    .testimonial-section .carousel-item{
-        padding:11rem 3.125rem;
-    }
+  /* top banner */
+  .top-banner {
+    padding: 10.875rem 0 9.375rem;
+  }
 
-    /* newslettar */
-    .newsletter{
-        width:75%;
-    }
-    .newsletter .main-btn{
-        width:100%;
-        margin-top:1rem;
-    }
 
-    /* footer link */
-    .footer .footer-link,
-    .footer a i{
-        padding:0 0.7rem;
-    }
-     
+  /* story section */
+  .story-section {
+    height: auto;
+    padding: 3rem 0;
+  }
+
+
+  /* carousel design */
+  .testimonial-section .carousel-item {
+    padding: 11rem 3.125rem;
+  }
+
+  /* newslettar */
+  .newsletter {
+    width: 75%;
+  }
+
+  .newsletter .main-btn {
+    width: 100%;
+    margin-top: 1rem;
+  }
+
+  /* footer link */
+  .footer .footer-link,
+  .footer a i {
+    padding: 0 0.7rem;
+  }
+
 }
 
 @media (max-width:330px) {
 
-    /* carousel design */
-    .testimonial-section .carousel-item{
-        padding:13rem 3.125rem;
-    }
-     
+  /* carousel design */
+  .testimonial-section .carousel-item {
+    padding: 13rem 3.125rem;
+  }
+
 }
-        
-      
