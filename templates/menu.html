@@ -120,7 +120,7 @@
           {% for obj in cat2 %}
           <div class="col-lg-4 col-md-6 mb-4">
             <div class="card h-100">
-              <img decoding="async" src="/media/{{objec.image}}" class="card-img-top" alt="{{obj.product_name}}"
+              <img decoding="async" src="/media/{{obj.image}}" class="card-img-top" alt="{{obj.product_name}}"
                 style="width: 100%; height: 300px; object-fit: cover;">
               <div class="card-body d-flex flex-column">
                 <h4 class="card-title">{{obj.product_name}}</h4>
@@ -195,9 +195,16 @@
         <div class="row">
           <div class="col-md-12 text-center">
             <a class="footer-link" href="/signin">Register</a>
-            <a class="footer-link" href="#">Forum</a>
-            <a class="footer-link" href="#">Affiliate</a>
-            <a class="footer-link" href="#">FAQ</a>
+            {% if user.is_staff or user.is_admin %}
+            <a href="/list-orders" class="footer-link">Go to
+              list-orders</a>
+            {% endif %}
+            {% if user.is_anonymous %}
+            <p class="text-dark">Login to track your orders</p>
+            {% else %}
+            <a href="/ordertracker" class="footer-link">Track YOUR
+              ORDERS</a>
+            {% endif %}
             <div class="footer-social pt-4 text-center">
               <a href="#"><i class="fab fa-facebook-f"></i></a>
               <a href="#"><i class="fab fa-twitter"></i></a>

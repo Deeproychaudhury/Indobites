@@ -1,10 +1,10 @@
-from django.shortcuts import render,redirect,get_object_or_404
+from django.shortcuts import render,redirect,get_object_or_404,HttpResponse
 from django.http import HttpResponseBadRequest
 from datetime import datetime,timedelta
 from django.contrib import messages
+from django.conf import settings
 from django.contrib.auth.models import User
-from django.contrib.auth import authenticate
-from django.contrib.auth import logout,login
+from django.contrib.auth import authenticate,logout,login 
 from .forms import Profileform,Userupdate,Bookform
 from .models import Profile,Product,Booking,OrderModel
 from django.core.mail import EmailMessage,send_mail
@@ -12,10 +12,12 @@ from django.contrib.auth import get_user_model
 from math import ceil
 from django.views import View
 import json
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required,user_passes_test
 from django.db.models import Count
 from django.contrib import messages
 from django.http import JsonResponse
+import stripe
+from django.views.decorators.csrf import csrf_exempt
 # Create your views here.
 def logoutuser(request):
     logout(request)
@@ -125,6 +127,10 @@ def prof(request):
              }
     return render(request,'ProfileCustomer.html',content)
 
+def is_staff_or_admin(user):
+    return user.is_staff or user.is_superuser
+
+
 def menu(request):
    if request.method == 'POST':
       filter_query=request.POST.get('select')
@@ -184,7 +190,7 @@ def add_to_cart(request):
 
 @login_required
 def cart(request):
-      orders=OrderModel.objects.filter(customer=request.user)
+      orders=OrderModel.objects.filter(customer=request.user,payment_status=False)
       count=orders.count() #count number of orders
       sum=0
       for ord in orders:
@@ -216,6 +222,120 @@ def cart(request):
         return redirect('cart')
 
       return render(request, 'cart.html', {'orders': orders, 'count': count, 'value': request.user.username, 'sum': sum})
+
+#HAndle razorpay
+
+stripe.api_key = settings.STRIPE_SECRET_KEY
+YOUR_DOMAIN = "http://127.0.0.1:8000"
+
+@login_required
+@csrf_exempt
+def createcheckoutsession(request):
+    order_id = "Pending"
+    totalprice = 0
+    line_items = []
+    orders = OrderModel.objects.filter(customer=request.user, payment_status=False)
+
+    for order in orders:
+        totalprice += order.price
+        product = order.product
+        if not product.stripe_price_id:
+            # Create a product in Stripe if it doesn't exist
+            stripe_product = stripe.Product.create(name=product.product_name)
+            product.stripe_product_id = stripe_product.id
+            product.save()
+
+            # Create a price for the product in Stripe
+            price = stripe.Price.create(
+                product=stripe_product.id,
+                unit_amount=product.price * 100,  # amount in the smallest currency unit
+                currency="inr",
+            )
+            product.stripe_price_id = price.id
+            product.save()
+
+        line_items.append({
+            'price': product.stripe_price_id,
+            'quantity': order.quantity,
+        })
+
+    if request.method == 'POST':
+        try:
+            checkout_session = stripe.checkout.Session.create(
+                line_items=line_items,
+                mode='payment',
+                automatic_tax={"enabled": True},
+                success_url=YOUR_DOMAIN + '/success?session_id={CHECKOUT_SESSION_ID}',
+                cancel_url=YOUR_DOMAIN + '/cart',
+            )
+            order_id = checkout_session.id
+            for ord in orders:
+                ord.stripe_checkout_session_id = checkout_session.id
+                ord.save()
+            return redirect(checkout_session.url, code=303)
+        except Exception as e:
+            return JsonResponse({'error': str(e)})
+
+    return render(request, 'payment.html', {'order_id': order_id})
+
+@login_required
+def payment_success(request):
+    orders = OrderModel.objects.filter(customer=request.user, payment_status=False)
+    checkout_session_id = request.GET.get('session_id', None)
+    session = stripe.checkout.Session.retrieve(checkout_session_id)
+    for order in orders:
+        order.payment_status = True
+        order.save()
+    return render(request, 'success.html',{'session':checkout_session_id})
+
+import time
+@csrf_exempt
+def stripe_webhook(request):
+    time.sleep(10)
+    payload = request.body
+    signature_header = request.META['HTTP_STRIPE_SIGNATURE']
+    event = None
+    try:
+        event = stripe.Webhook.construct_event(
+            payload, signature_header, settings.STRIPE_WEBHOOK_SECRET
+        )
+    except ValueError as e:
+        return HttpResponseBadRequest()
+    except stripe.error.SignatureVerificationError as e:
+        return HttpResponseBadRequest()
+    if event['type'] == 'checkout.session.completed':
+        session = event['data']['object']
+        # Mark orders as paid
+        for order in OrderModel.objects.filter(customer=request.user, payment_status=False):
+            order.payment_status = True
+            order.save()
+    return HttpResponse(status=200)
+
+@login_required(login_url='login')
+def ordertracker(request):
+    if request.user.is_anonymous:
+        sign=False
+    else:
+        sign=True
+    orders = OrderModel.objects.filter(customer=request.user, payment_status=True)
+    return render(request, 'ordertracker.html', {'orders': orders,'sign':sign})
+
+
+@user_passes_test(is_staff_or_admin, login_url='/')
+def list_orders(request):
+    if request.user.is_anonymous:
+        sign=False
+    else:
+        sign=True
+    orders = OrderModel.objects.all().select_related('customer', 'product')
+    if request.method == 'POST':
+        order_id = request.POST.get('order_id')
+        status = request.POST.get('status')
+        order = OrderModel.objects.get(id=order_id)
+        order.status = status
+        order.save()
+        return redirect('list_orders')
+    return render(request, 'list_orders.html', {'orders': orders,'sign':sign})
 
 def booking(request):
      if request.user.is_anonymous:

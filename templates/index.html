@@ -57,8 +57,6 @@
             <button class="main-btn"><a href="/login">login</a></button>
             </li>
             {% endif %}
-
-
           </ul>
         </div>
       </div>
@@ -422,7 +420,6 @@
       </div>
     </div>
   </section>
-
   <!-- section-9 footer-->
   <footer id="footer">
     <div class="footer py-5">
@@ -430,9 +427,22 @@
         <div class="row">
           <div class="col-md-12 text-center">
             <a class="footer-link" href="/signin">Register</a>
-            <a class="footer-link" href="#">Forum</a>
+            <a class="footer-link" href="/prof">Profile</a>
+            <a class="footer-link" href="#testimonial">Testimonial</a>
             <a class="footer-link" href="#">Affiliate</a>
             <a class="footer-link" href="#">FAQ</a>
+            <div class="footer pt-4 text-center">
+              {% if user.is_staff or user.is_admin %}
+              <a href="/list-orders" class="footer-link">Go to
+                list-orders</a>
+              {% endif %}
+              {% if user.is_anonymous %}
+              <p class="text-dark">Login to track your orders</p>
+              {% else %}
+              <a href="/ordertracker" class="footer-link">Track YOUR
+                ORDERS</a>
+              {% endif %}
+            </div>
             <div class="footer-social pt-4 text-center">
               <a href="#"><i class="fab fa-facebook-f"></i></a>
               <a href="#"><i class="fab fa-twitter"></i></a>

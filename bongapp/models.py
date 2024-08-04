@@ -48,19 +48,30 @@ class Product(models.Model):
     image=models.ImageField(upload_to="shop",default="demo.jpg") # store image
     description=models.CharField(max_length=500)
     pub_date=models.DateField()
+    stripe_price_id = models.CharField(max_length=255, blank=True, null=True)
 
     def __str__(self):
        return self.product_name
 
 class OrderModel(models.Model):
+    status_choices = (
+        (1, 'Not Packed'),
+        (2, 'Ready'),
+        (3, 'Delivered')
+    )
     created_on=models.DateTimeField(auto_now_add=True)
     price=models.IntegerField(default=0)
     product = models.ForeignKey(Product,
-                                on_delete=models.CASCADE,default=1)
+                                on_delete=models.CASCADE,default=0)
     customer = models.ForeignKey(User,
-                                 on_delete=models.CASCADE,default=1)
+                                 on_delete=models.CASCADE,default=0)
     quantity = models.IntegerField(default=1)
     phone = models.CharField(max_length=50, default='', blank=True)
+    status = models.IntegerField(choices = status_choices, default=1)
+    payment_status = models.BooleanField(default=False)
+    stripe_checkout_sessionid=models.CharField
+    
+
 
     def __str__(self):
         return f'Order: {self.created_on.strftime("%b %d %I: %M %p")}'
