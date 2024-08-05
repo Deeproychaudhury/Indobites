@@ -49,6 +49,7 @@ class Product(models.Model):
     description=models.CharField(max_length=500)
     pub_date=models.DateField()
     stripe_price_id = models.CharField(max_length=255, blank=True, null=True)
+    stripe_product_id=models.CharField(max_length=255,blank=True,null=True)
 
     def __str__(self):
        return self.product_name
@@ -69,7 +70,7 @@ class OrderModel(models.Model):
     phone = models.CharField(max_length=50, default='', blank=True)
     status = models.IntegerField(choices = status_choices, default=1)
     payment_status = models.BooleanField(default=False)
-    stripe_checkout_sessionid=models.CharField
+    stripe_checkout_sessionid=models.CharField(max_length=255, blank=True, null=True)
     
 
 

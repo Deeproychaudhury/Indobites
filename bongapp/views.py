@@ -18,6 +18,7 @@ from django.contrib import messages
 from django.http import JsonResponse
 import stripe
 from django.views.decorators.csrf import csrf_exempt
+from django.core.mail import send_mail
 # Create your views here.
 def logoutuser(request):
     logout(request)
@@ -83,6 +84,11 @@ def handlesignin(request):
             myuser.first_name = name
             myuser.last_name = title  # Assign the title or last name
             myuser.save()
+            subject = 'welcome to INDOBITES'
+            message = f'Hi {user.username}, thank you for registering'
+            email_from = settings.EMAIL_HOST_USER
+            recipient_list = [user.email, ]
+            send_mail( subject, message, email_from, recipient_list )
 
             # Authenticate and log the user in
             user = authenticate(username=name, password=password)
@@ -162,7 +168,6 @@ def menu(request):
     }
    return render(request,'menu.html',context)
 
-#class Cart(View):
 @login_required
 def add_to_cart(request):
     if request.method=='POST':
@@ -227,6 +232,14 @@ def cart(request):
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 YOUR_DOMAIN = "http://127.0.0.1:8000"
+TAX_RATE=stripe.TaxRate.create(
+  display_name="GST",
+  inclusive=False,
+  percentage=18,
+  country="IN",
+  description="IN Tax",
+)
+TAX_RATE_ID=TAX_RATE.id
 
 @login_required
 @csrf_exempt
@@ -257,14 +270,16 @@ def createcheckoutsession(request):
         line_items.append({
             'price': product.stripe_price_id,
             'quantity': order.quantity,
+            'tax_rates':[TAX_RATE_ID]
+
         })
 
     if request.method == 'POST':
         try:
             checkout_session = stripe.checkout.Session.create(
+
                 line_items=line_items,
                 mode='payment',
-                automatic_tax={"enabled": True},
                 success_url=YOUR_DOMAIN + '/success?session_id={CHECKOUT_SESSION_ID}',
                 cancel_url=YOUR_DOMAIN + '/cart',
             )
@@ -285,6 +300,7 @@ def payment_success(request):
     session = stripe.checkout.Session.retrieve(checkout_session_id)
     for order in orders:
         order.payment_status = True
+        order.stripe_checkout_sessionid=checkout_session_id
         order.save()
     return render(request, 'success.html',{'session':checkout_session_id})
 
@@ -305,10 +321,32 @@ def stripe_webhook(request):
         return HttpResponseBadRequest()
     if event['type'] == 'checkout.session.completed':
         session = event['data']['object']
+        customer_email = session.get('customer_details', {}).get('email', '')
         # Mark orders as paid
-        for order in OrderModel.objects.filter(customer=request.user, payment_status=False):
+        orders=OrderModel.objects.filter(customer=request.user, payment_status=False)
+        for order in orders:
             order.payment_status = True
+            checkout_session_id = request.GET.get('session_id', None)
+            order.stripe_checkout_sessionid=checkout_session_id
             order.save()
+        subject = 'Payment Receipt'
+        message = f'Thank you for your payment. Your order details are as follows:\n\n'
+        for order in orders:
+            message += f'Order ID: {order.id} and Session Id : {checkout_session_id}\n'
+            message += f'Product: {order.product.product_name}\n'
+            message += f'Quantity: {order.quantity}\n'
+            message += f'Total Price: {order.price}\n'
+            message += f'Status: {"Paid" if order.payment_status else "Pending"}\n\n'
+        message += 'Thank you for shopping with us!'
+
+        if request.user.email or customer_email:
+            send_mail(
+                subject,
+                message,
+                settings.EMAIL_HOST_USER,
+                [request.user.email,customer_email],
+                fail_silently=False,
+            )
     return HttpResponse(status=200)
 
 @login_required(login_url='login')

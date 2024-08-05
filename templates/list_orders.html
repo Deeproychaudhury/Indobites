@@ -37,7 +37,7 @@
                             <a class="nav-link" href="/prof">Profile</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="cart">🛒Cart</a>
+                            <a class="nav-link" href="/cart">🛒Cart</a>
                         </li>
                         <li>
                             <strong> Welcome Dear {{user.username}}</strong>
@@ -70,6 +70,7 @@
                         <th scope="col">Phone</th>
                         <th scope="col">Status</th>
                         <th scope="col">Update Status</th>
+                        <th scole="col">Session ID</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -98,8 +99,11 @@
                                 </select>
                                 <button type="submit" class="btn btn-primary mt-2">Update</button>
                             </form>
+                        <td style="max-width: 150px; overflow-x: auto; white-space: nowrap;">
+                            {{order.stripe_checkout_sessionid}}</td>
                         </td>
                     </tr>
+
                     {% endfor %}
                 </tbody>
             </table>
@@ -112,6 +116,7 @@
                 <div class="row">
                     <div class="col-md-12 text-center">
                         <a class="footer-link" href="/signin">Register</a>
+
                         {% if user.is_anonymous %}
                         <p class="text-dark">Login to track your orders</p>
                         {% else %}
