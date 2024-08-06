@@ -19,7 +19,7 @@
 a,
 a:hover {
   text-decoration: none;
-  color: #eee;
+  color: #a88a8a;
 }
 
 a:hover {
@@ -27,10 +27,9 @@ a:hover {
 }
 
 strong {
-  font-size: 1rem;
+  font-size: 0.90rem;
   font-family: papyrus;
   font-weight: bold;
-  line-height: 1.75rem;
   letter-spacing: 1px;
 }
 
@@ -138,9 +137,11 @@ p {
   font-weight: 400;
   line-height: 1.75rem;
   letter-spacing: 1px;
+  padding: 0;
 }
 
 .main-btn {
+
   display: inline-block;
   padding: 0.625rem 1.875rem;
   line-height: 1.5625rem;
@@ -174,7 +175,7 @@ p {
 }
 
 .main-btn:hover {
-  background-color: rgba(204, 161, 161, 0.488);
+  background-color: rgb(240, 239, 239);
   color: var(--primary-color);
 }
 
@@ -459,7 +460,7 @@ FAQ section Design
   background-attachment: fixed;
   background-position: 0 71.9125px;
   padding: 4.375rem 0;
-  filter: brightness(70%);
+  filter: brightness(95%);
 }
 
 /* Form Control */
@@ -519,6 +520,12 @@ footer section Design
   color: var(--white-color);
   padding: 0 1rem;
 }
+
+/*
+==========================================
+chat section Design
+==========================================
+*/
 
 
 @media (max-width:1024px) {

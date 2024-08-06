@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .models import Profile,Booking
+from .models import *
 from django.forms import TextInput,EmailInput,ImageField
 
 class Bookform(forms.ModelForm):
@@ -10,6 +10,13 @@ class Bookform(forms.ModelForm):
    class Meta:
       model=Booking
       fields=['date']
+    
+class Chatform(forms.ModelForm):
+   
+   class Meta:
+      model=Groupmessage
+      fields=['body']
+      widgets={'body' : forms.TextInput(attrs={'placeholder': 'Add message ...', 'class': 'form-control-lg form-control','id':'textInput', 'maxlength' : '500', 'autofocus': True ,'oninput':'showTypingIndicator()'}),}
 
 class Userupdate(forms.ModelForm):
    email=forms.EmailField()

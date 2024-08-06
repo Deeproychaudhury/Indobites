@@ -21,5 +21,6 @@ admin.site.index_title = "Welcome to Indo BiTes Portal"
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('',include('bongapp.urls'))
+    path('',include('bongapp.urls')),
+    
 ]

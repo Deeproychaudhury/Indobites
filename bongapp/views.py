@@ -5,8 +5,8 @@ from django.contrib import messages
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate,logout,login 
-from .forms import Profileform,Userupdate,Bookform
-from .models import Profile,Product,Booking,OrderModel
+from .forms import Profileform,Userupdate,Bookform,Chatform
+from .models import Profile,Product,Booking,OrderModel,ChatGroup,Groupmessage
 from django.core.mail import EmailMessage,send_mail
 from django.contrib.auth import get_user_model
 from math import ceil
@@ -20,6 +20,8 @@ import stripe
 from django.views.decorators.csrf import csrf_exempt
 from django.core.mail import send_mail
 # Create your views here.
+
+
 def logoutuser(request):
     logout(request)
     # Redirect to a success page.
@@ -48,7 +50,6 @@ def loginuser(request):
                 messages.error(request, error_message)
                 return render(request, 'login.html')
     return render(request, 'login.html')
-
 
   
 def index(request):
@@ -106,10 +107,12 @@ def handlesignin(request):
 
     return render(request, 'CreateAccount.html')
 
-def prof(request):
+def prof(request,username):
     if request.user.is_anonymous:
        return redirect("/login")
-    
+    user = get_object_or_404(User, username=username)
+    if request.user.username != username:
+        return render(request,'ProfileDifferent.html',{'user':user})
     if request.method == 'POST':
       uform=Userupdate(request.POST,instance=request.user)
       pform=Profileform(request.POST,
@@ -119,7 +122,7 @@ def prof(request):
          uform.save()
          pform.save()
          messages.success(request, 'Profile update done')
-         return redirect("prof")
+         return redirect(f"/prof/{request.user.username}")
 
     else:
       uform=Userupdate(instance=request.user)
@@ -133,9 +136,14 @@ def prof(request):
              }
     return render(request,'ProfileCustomer.html',content)
 
+def deleteprofile(request):
+     user = request.user
+     if request.method == "POST":
+        logout(request)
+        user.delete()
+        return redirect("")
 def is_staff_or_admin(user):
     return user.is_staff or user.is_superuser
-
 
 def menu(request):
    if request.method == 'POST':
@@ -168,7 +176,7 @@ def menu(request):
     }
    return render(request,'menu.html',context)
 
-@login_required
+@login_required(login_url='/login')
 def add_to_cart(request):
     if request.method=='POST':
      product=request.POST.get('obj_id')
@@ -193,7 +201,7 @@ def add_to_cart(request):
     messages.success(request,"Item added. Proceed to checkout or add browse other items")
     return redirect('menu')
 
-@login_required
+@login_required(login_url='/login')
 def cart(request):
       orders=OrderModel.objects.filter(customer=request.user,payment_status=False)
       count=orders.count() #count number of orders
@@ -241,7 +249,7 @@ TAX_RATE=stripe.TaxRate.create(
 )
 TAX_RATE_ID=TAX_RATE.id
 
-@login_required
+@login_required(login_url='/login')
 @csrf_exempt
 def createcheckoutsession(request):
     order_id = "Pending"
@@ -293,7 +301,7 @@ def createcheckoutsession(request):
 
     return render(request, 'payment.html', {'order_id': order_id})
 
-@login_required
+@login_required(login_url='/login')
 def payment_success(request):
     orders = OrderModel.objects.filter(customer=request.user, payment_status=False)
     checkout_session_id = request.GET.get('session_id', None)
@@ -349,7 +357,7 @@ def stripe_webhook(request):
             )
     return HttpResponse(status=200)
 
-@login_required(login_url='login')
+@login_required(login_url='/login')
 def ordertracker(request):
     if request.user.is_anonymous:
         sign=False
@@ -359,7 +367,7 @@ def ordertracker(request):
     return render(request, 'ordertracker.html', {'orders': orders,'sign':sign})
 
 
-@user_passes_test(is_staff_or_admin, login_url='/')
+@user_passes_test(is_staff_or_admin, login_url='/login')
 def list_orders(request):
     if request.user.is_anonymous:
         sign=False
@@ -396,3 +404,22 @@ def booking(request):
      context={'seats': ["2", "4","10","20", "30+(buffet)"
                   ],}
      return render(request,'profile.html',context)
+
+@login_required(login_url='/login')
+def chatview(request):
+    chat_group=get_object_or_404(ChatGroup,groupname="Public-chat")
+    chat_messages=chat_group.chat_messages.all()[:30]
+    form=Chatform()
+    if request.method =='POST':
+        form=Chatform(request.POST)
+        if form.is_valid:
+            message=form.save(commit=False)
+            message.author = request.user
+            message.group=chat_group
+            message.save()
+            context = {
+                'message' : message,
+                'user' : request.user
+            }
+            return render(request,'partials/chat_message_p.html',context)
+    return render(request,'chat.html',{'chat_messages':chat_messages,'form':form})

@@ -40,7 +40,7 @@
               <a class="nav-link" href="#about">About Us</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/prof">Profile</a>
+              <a class="nav-link" href="/prof/{{user.username}}">Profile</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="#testimonial">Reviews</a>
@@ -382,17 +382,32 @@
   </section>
 
   <!-- section-7 book-food-->
+  <!-- section-7 book-food-->
   <section id="book-food">
     <div class="book-food">
       <div class="container book-food-text">
-        <div class="row text-center">
-          <div class="col-lg-9 col-md-12">
-            <h2>Imbibe in Fine Beverages to Enhance Your Dining Delight.</h2>
+        <div class="row justify-content-center">
+          <div class="col-lg-9 col-md-12 text-center">
+            <h2 class="w-100 py-2" style="color: white; background-color: transparent;">Join The Community</h2>
+            <p style="color: white; background-color: transparent; font-size:1.5rem ;">Joining the community chat of
+              IndoBites, an Indian food cuisine specialist restaurant, offers a wealth of benefits for
+              food enthusiasts and loyal patrons alike. By becoming part of this vibrant community, you gain access to
+              exclusive
+              updates on the latest menu items, seasonal specials, and culinary events. Engage directly with fellow food
+              lovers to
+              share experiences, tips, and recipes, or get personalized recommendations from the chefs
+              themselves.Connect with fellow food
+              enthusiasts, share
+              opinions, and interact with one another in our community
+              chat.
+            </p>
+            <button class="main-btn btn mt-4"><a href="/chatview">Join the Chat</a></button>
           </div>
         </div>
       </div>
     </div>
   </section>
+
 
   <!-- section-8 newslettar-->
   <section id="newslettar">
@@ -420,6 +435,8 @@
       </div>
     </div>
   </section>
+
+
   <!-- section-9 footer-->
   <footer id="footer">
     <div class="footer py-5">
